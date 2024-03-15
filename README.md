@@ -20,3 +20,12 @@ However, ``Latte`` still falls short in terms of video generation length and qua
 
 ## How to use
 
+**You only need three lines of code to start downloading the video**
+```python
+from vidfetch.website import MixkitVideoDataset
+
+mixkit = MixkitVideoDataset(root_dir="mixkit")
+mixkit.download(platform="windows")
+```
+
+## VidFetch's design philosophy
