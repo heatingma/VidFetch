@@ -50,11 +50,11 @@ def generate_mixkit_video_uid(
     inner_idx: int,
     md5: str
 ) -> str:
-    website_uid = WEBSITE_UID["mixkit"]
-    category_uid = CATEGORY_UID[category]
-    page_uid = "{:02d}".format(page_idx)
-    inner_uid = "{:02d}".format(inner_idx)
-    video_uid = md5[0] + website_uid + md5[1] + category_uid + \
-        md5[2] + page_uid + md5[3] + inner_uid
+    website_uid = WEBSITE_UID["mixkit"] # 2
+    category_uid = CATEGORY_UID[category] # 2
+    page_uid = "{:02d}".format(page_idx) # 2
+    inner_uid = "{:02d}".format(inner_idx) # 2
+    md5_uid = md5[:8] # 8
+    video_uid = website_uid + category_uid + page_uid + inner_uid + md5_uid # 16
     return video_uid
     

@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from vidfetch.video import VideoDataset, VideoData
 from vidfetch.utils import download_view_source, download, get_md5
 from vidfetch.uid.mixkit import generate_mixkit_video_uid,  CATEGORY_PAGE_NUM
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 
 class MixkitVideoDataset(VideoDataset):
@@ -15,13 +16,16 @@ class MixkitVideoDataset(VideoDataset):
             root_dir=root_dir
         )
     
-    def download(self, platform: str="windows"):
+    def download(
+        self, 
+        platform: str="windows",
+    ):
         for category, page_num in CATEGORY_PAGE_NUM.items():
             print(f"download the {category} with {page_num} pages")
             for page_idx in tqdm(range(page_num)):
                 self.download_with_category_page_idx(
                     category=category,
-                    page_idx=page_idx,
+                    page_idx=page_idx+1,
                     platform=platform
                 )
 
@@ -95,7 +99,7 @@ class MixkitVideoDataset(VideoDataset):
             except:
                 download_success = False
                 cur_time = str(datetime.now())
-                error_message = f"{cur_time}: error occurred when the link is {download_url}"
+                error_message = f"{cur_time}: error occurred when the download url is {download_url}"
                 with open(self.log_path, "a") as log_file:
                     log_file.write(error_message)
             if not download_success:

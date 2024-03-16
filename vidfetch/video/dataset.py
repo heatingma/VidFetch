@@ -36,10 +36,15 @@ class VideoDataset:
         else:
             last_video = videos_state_dict['last_video']
             print(f"Last save time: {videos_state_dict['last_save_time']}")
+            print(f"Summary is as followed")
+            print_dict_as_table(videos_state_dict['summary'])
             print(f"The last video you have download is as followed.")
             print_dict_as_table(last_video)
 
-    def download(self):
+    def download(
+        self, 
+        platform: str="windows"
+    ):
         raise NotImplementedError()
     
     def __repr__(self) -> str:
