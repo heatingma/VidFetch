@@ -29,6 +29,18 @@ from vidfetch.website import MixkitVideoDataset
 mixkit = MixkitVideoDataset(root_dir="mixkit")
 mixkit.download(platform="windows")
 ```
+<details>
+<summary>Click to view examples we have implemented</summary>
+
+- Download videos from Mixkit
+
+<div><img src="docs/download.gif" width=100%></div>
+
+- When you interrupt the download, the monitor will record the video information you downloaded successfully last time and continue downloading based on this information
+
+<div><img src="docs/continue_download.gif" width=100%></div>
+
+</details>
 
 ## VidFetch's design philosophy
 <img src="docs\VidFecth.png" weight="100%">
