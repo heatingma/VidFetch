@@ -16,6 +16,14 @@ def create_chrome_driver(
         options.add_argument(f"user-agent={USERAGENT[platform]}")
     if disable_gpu:
         options.add_argument('--disable-gpu')
+    if platform == "linux":
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-extensions')
+        options.add_argument('--disable-infobars')
+        options.add_argument('--disable-notifications')
+        options.add_argument('--enable-logging')
+        options.add_argument('--v=1')
     options.add_argument('window-size=1920x1080')
     prefs = {
         "download.default_directory": save_dir,

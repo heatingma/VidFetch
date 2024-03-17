@@ -9,7 +9,8 @@ USERAGENT = {
 
 
 REFER = {
-    "mixkit": "https://mixkit.co"
+    "mixkit": "https://mixkit.co",
+    "pixabay": "https://pixabay.com/videos/search/?order=ec"
 }
 
 
