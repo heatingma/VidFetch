@@ -5,7 +5,8 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from vidfetch.video import VideoDataset, VideoData
 from vidfetch.utils import download_view_source, download, get_md5
-from vidfetch.uid.mixkit import generate_mixkit_video_uid,  CATEGORY_PAGE_NUM
+from vidfetch.uid.mixkit import generate_mixkit_video_uid, \
+    CATEGORY_PAGE_NUM, CATEGORY_UID2, CATEGORY_UID
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 
@@ -15,19 +16,45 @@ class MixkitVideoDataset(VideoDataset):
             website="mixkit", 
             root_dir=root_dir
         )
-    
+            
     def download(
         self, 
         platform: str="windows",
+        restart: bool=False
     ):
-        for category, page_num in CATEGORY_PAGE_NUM.items():
-            print(f"download the {category} with {page_num} pages")
-            for page_idx in tqdm(range(page_num)):
-                self.download_with_category_page_idx(
-                    category=category,
-                    page_idx=page_idx+1,
-                    platform=platform
-                )
+        last_video_info = self.monitor.last_video
+        if last_video_info == dict():
+            restart = True
+        if restart:
+            for category, page_num in CATEGORY_PAGE_NUM.items():
+                print(f"download the {category} with {page_num} pages")
+                for page_idx in range(page_num):
+                    self.download_with_category_page_idx(
+                        category=category,
+                        page_idx=page_idx+1,
+                        platform=platform
+                    ) 
+        else:
+            last_video_uid = last_video_info['uid']
+            category_idx = last_video_uid[2:4]
+            category_idx_int = int(category_idx)
+            last_category = CATEGORY_UID2[category_idx]
+            last_page_idx = int(last_video_uid[4:6])
+            print(f"Starting from category({last_category}), page_idx({last_page_idx})...")
+            for category, page_num in CATEGORY_PAGE_NUM.items():
+                cur_category_idx_int = int(CATEGORY_UID[category])
+                if cur_category_idx_int < category_idx_int:
+                    continue
+                print(f"download the {category} with {page_num} pages")
+                for page_idx in range(page_num):
+                    if cur_category_idx_int == category_idx_int:
+                        if page_idx+1 < last_page_idx:
+                            continue
+                    self.download_with_category_page_idx(
+                        category=category,
+                        page_idx=page_idx+1,
+                        platform=platform
+                    )
 
     def download_with_category_page_idx(
         self,
@@ -57,7 +84,8 @@ class MixkitVideoDataset(VideoDataset):
         html_origin_urls = soup.find_all(class_="item-grid-card__title")
         origin_urls = ["https://mixkit.co" + video.find('a')['href'] for video in html_origin_urls]
         
-        for idx, unprocess_download_url in tqdm(enumerate(unprocess_download_urls)):
+        for idx, unprocess_download_url in tqdm(enumerate(unprocess_download_urls), 
+                                                desc=f"Download Page {page_idx}"):
             # download the origin page's view source
             origin_url = origin_urls[idx]
             origin_url_download_path = os.path.join(self.cache_dir, f"{category}_{page_idx}_{idx}.html")
@@ -65,7 +93,7 @@ class MixkitVideoDataset(VideoDataset):
                 download_view_source(
                     website="mixkit",
                     url=origin_url,
-                    save_path=origin_url_download_path ,
+                    save_path=origin_url_download_path,
                     platform=platform
                 )
             # read data from html
@@ -91,22 +119,43 @@ class MixkitVideoDataset(VideoDataset):
                 continue
             
             # download
-            download_success = True
             tmp_filename =  f"{category}_{page_idx}_{idx}_tmp.mp4"
             tmp_download_path = os.path.join(self.tmp_dir, tmp_filename)
-            try:
-                download(tmp_download_path, download_url)
-            except:
-                download_success = False
-                cur_time = str(datetime.now())
-                error_message = f"{cur_time}: error occurred when the download url is {download_url}"
-                with open(self.log_path, "a") as log_file:
-                    log_file.write(error_message)
+            download_success = self.download_one_instance(
+                download_url=download_url,
+                download_path=tmp_download_path
+            )
             if not download_success:
+                error_message = f"error occurred when the download url is {download_url}"
+                self.log_error(error_message)
+                self.clear_tmpfile(tmp_download_path)
                 continue
             
-            # if download sucessfully, record the info of video
+            # if download sucessfully, check the md5
+            # if md5 already exists, change the download url
+            # then re-download the file and get md5 again
             md5 = get_md5(tmp_download_path)
+            if md5 in self.monitor.md5_list:
+                self.clear_tmpfile(tmp_download_path)
+                error_message = f"A video with the same md5 code ({md5}) already exists, download_url: {download_url}"
+                self.log_error(error_message)
+                download_url = unprocess_download_url.replace("/preview/", "/download/")
+                download_url = download_url.replace("-small", "")
+                download_success = self.download_one_instance(
+                    download_url=download_url,
+                    download_path=tmp_download_path
+                )
+                if not download_success:
+                    error_message = f"error occurred when the download url is {download_url}"
+                    self.log_error(error_message)
+                md5 = get_md5(tmp_download_path)
+                if md5 in self.monitor.md5_list:
+                    error_message = f"A video with the same md5 code ({md5}) already exists, download_url: {download_url}"
+                    self.log_error(error_message)
+                    self.clear_tmpfile(tmp_download_path)
+                    continue
+            
+            # record the info of video
             uid = generate_mixkit_video_uid(
                 category=category,
                 page_idx=page_idx,
@@ -137,5 +186,22 @@ class MixkitVideoDataset(VideoDataset):
             self.monitor.add_item(new_video_info_dict)
             self.monitor.update_state()
             self.monitor.save_state_dict()
-            
+    
+    def clear_tmpfile(self, tmp_download_path: str):
+        if os.path.exists(tmp_download_path):
+            os.remove(tmp_download_path)
+    
+    def download_one_instance(
+        self, 
+        download_url: str, 
+        download_path: str
+    ):
+        download_success = True
+        try:
+            download(download_path, download_url)
+        except:
+            download_success = False
+            error_message = f"error occurred when the download url is {download_url}"
+            self.log_error(error_message)
+        return download_success   
             

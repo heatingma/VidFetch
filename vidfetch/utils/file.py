@@ -38,7 +38,7 @@ def _download(filename: str, url: str, md5: str, retries):
         raise RuntimeError('Max Retries exceeded!')
 
     if not os.path.exists(filename):
-        if retries % 3 == 1:
+        if retries % 3 == 2:
             try:
                 down_res = requests.get(url, stream=True)
                 file_size = int(down_res.headers.get('Content-Length', 0))
@@ -47,7 +47,7 @@ def _download(filename: str, url: str, md5: str, retries):
                         shutil.copyfileobj(content, file)
             except requests.exceptions.ConnectionError as err:
                 return download(filename, url, md5, retries - 1)
-        elif retries % 3 == 2:
+        elif retries % 3 == 1:
             try:
                 asyncio.run(_asyncdownload(filename, url))
             except:

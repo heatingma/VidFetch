@@ -30,6 +30,26 @@ CATEGORY_UID = {
 }
 
 
+CATEGORY_UID2 = {
+    '01': 'sky', '02': 'beach', '03': 'flower', '04': 'rain',
+    '05': 'forest', '06': 'sun', '07': 'night', '08': 'earth',
+    '09': 'sea', '10': 'water', '11': 'snow', '12': 'fire',
+    '13': 'sunset', '14': 'smoke', '15': 'space', '16': 'clouds',
+    '17': 'man', '18': 'girl', '19': 'sport', '20': 'music',
+    '21': 'love', '22': 'party', '23': 'baby', '24': 'woman',
+    '25': 'couple', '26': 'business', '27': 'dance', '28': 'house',
+    '29': 'family', '30': 'fashion', '31': 'cat', '32': 'monkey',
+    '33': 'reptile', '34': 'zoo', '35': 'fish', '36': 'dog',
+    '37': 'bird', '38': 'shark', '39': 'safari', '40': 'kitten',
+    '41': 'wildlife', '42': 'tea', '43': 'corn', '44': 'cocktail',
+    '45': 'eating', '46': 'fast-food', '47': 'coffee', '48': 'fruit',
+    '49': 'beer', '50': 'salad', '51': 'vegetable', '52': 'restaurant',
+    '53': 'car', '54': 'city', '55': 'trains', '56': 'airplane',
+    '57': 'bicycle', '58': 'drive', '59': 'street', '60': 'traffic',
+    '61': 'trucks', '62': 'taxi', '63': 'motorcycle', '64': 'road'
+}
+
+
 CATEGORY_PAGE_NUM = {'sky': 42, 'beach': 42, 'flower': 42, 'rain': 13, 'forest': 42, 
     'sun': 42, 'night': 42, 'earth': 13, 'sea': 42, 'water': 34, 'snow': 42, 'fire': 18, 
     'sunset': 42, 'smoke': 18, 'space': 19, 'clouds': 34, 'man': 34, 'girl': 67, 

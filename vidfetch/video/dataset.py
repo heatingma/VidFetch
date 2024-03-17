@@ -1,5 +1,7 @@
 import os
+import numpy as np
 from .monitor import VideoMonitor
+from datetime import datetime
 from vidfetch.utils import print_dict_as_table
 
 
@@ -16,6 +18,7 @@ class VideoDataset:
         self.cache_dir = os.path.join(root_dir, "cache")
         self.log_path = os.path.join(root_dir, "run_log.txt")
         self.monitor_save_path = os.path.join(root_dir, "monitor.npy")
+        
         # check dir
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
@@ -41,6 +44,12 @@ class VideoDataset:
             print(f"The last video you have download is as followed.")
             print_dict_as_table(last_video)
 
+    def log_error(self, error_message: str):
+        cur_time = str(datetime.now())
+        error_message = f"{cur_time}: {error_message}\n"
+        with open(self.log_path, "a") as log_file:
+            log_file.write(error_message)
+        
     def download(
         self, 
         platform: str="windows"
