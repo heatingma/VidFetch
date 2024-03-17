@@ -1,5 +1,5 @@
 <div align="center">
-<img src="docs/logo-2.png" alt="logo" width="750"/>
+<img src="static/logo-2.png" alt="logo" width="750"/>
 </div>
 
 
@@ -22,6 +22,12 @@ However, ``Latte`` still falls short in terms of video generation length and qua
 
 ## How to use
 
+**Install related dependency packages**
+```bash
+pip install -r doc/requirements.txt
+```
+
+
 **You only need three lines of code to start downloading the video**
 ```python
 from vidfetch.website import MixkitVideoDataset
@@ -34,13 +40,13 @@ mixkit.download(platform="windows")
 
 - Download videos from Mixkit
 
-<div><img src="docs/download.gif" width=100%></div>
+<div><img src="static/download.gif" width=100%></div>
 
 - When you interrupt the download, the monitor will record the video information you downloaded successfully last time and continue downloading based on this information
 
-<div><img src="docs/continue_download.gif" width=100%></div>
+<div><img src="static/continue_download.gif" width=100%></div>
 
 </details>
 
 ## VidFetch's design philosophy
-<img src="docs\VidFecth.png" weight="100%">
+<img src="static/VidFecth.png" weight="100%">
