@@ -20,6 +20,10 @@ class PexelsVdieoDataset(VideoDataset):
             website="pexels", 
             root_dir=root_dir,
         )
+        self.finish_api_id_list = self.monitor.videos_state_dict.get(
+            'finish_api_id_list', list()
+        )
+        self.finish_api_id_list: list
         
     def download(
         self, 
@@ -28,7 +32,7 @@ class PexelsVdieoDataset(VideoDataset):
         headless: bool=True,
         disable_gpu: bool=True,
         sleep_interval: int=1,
-        timeout: int=60,
+        timeout: int=30,
         platform: str="windows",
     ):
         self.driver = create_chrome_driver(
@@ -41,6 +45,8 @@ class PexelsVdieoDataset(VideoDataset):
         api_video_dict = api_dict['videos']
         api_video_dict: dict
         for api_video_info in tqdm(api_video_dict.values()):
+            if api_video_info['api_id'] in self.finish_api_id_list:
+                continue
             self.download_with_api_video_info(
                 api_video_info,
                 sleep_interval=sleep_interval,
@@ -70,8 +76,13 @@ class PexelsVdieoDataset(VideoDataset):
         if not download_success:
             error_message = f"error occurred when the download url is {download_url}"
             self.log_error(error_message)
+            shutil.rmtree(self.tmp_dir)
+            os.makedirs(self.tmp_dir)
         else:
-            tmp_download_path = os.path.join(self.tmp_dir, os.listdir(self.tmp_dir)[0])
+            tmp_dir_files = os.listdir(self.tmp_dir)
+            if len(tmp_dir_files) != 1:
+                raise ValueError()
+            tmp_download_path = os.path.join(self.tmp_dir, tmp_dir_files[0])
             md5 = get_md5(tmp_download_path)
             
             # record the info of video
@@ -82,6 +93,7 @@ class PexelsVdieoDataset(VideoDataset):
             )
             save_path = os.path.join(self.download_dir, f"{uid}.mp4")
             shutil.move(tmp_download_path, save_path)
+            self.finish_api_id_list.append(api_id)
             
             video_info_dict = {
                 "uid": uid,
@@ -103,6 +115,7 @@ class PexelsVdieoDataset(VideoDataset):
             new_video_info_dict = video_data.get_video_info_dict()
             self.monitor.add_item(new_video_info_dict)
             self.monitor.update_state()
+            self.monitor.videos_state_dict['finish_api_id_list'] = self.finish_api_id_list
             self.monitor.save_state_dict()
         
         

@@ -1,4 +1,5 @@
 import os
+import shutil
 import numpy as np
 from .monitor import VideoMonitor
 from datetime import datetime
@@ -23,6 +24,9 @@ class VideoDataset:
         if not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
         if not os.path.exists(self.tmp_dir):
+            os.makedirs(self.tmp_dir)
+        else:
+            shutil.rmtree(self.tmp_dir)
             os.makedirs(self.tmp_dir)
         if not os.path.exists(self.download_dir):
             os.makedirs(self.download_dir)
