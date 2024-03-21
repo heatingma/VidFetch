@@ -12,12 +12,12 @@ class VideoDataset:
         root_dir: str
     ):
         self.website = website
-        self.root_dir = root_dir
-        self.download_dir = os.path.join(root_dir, "download")
-        self.tmp_dir = os.path.join(root_dir, "tmp")
-        self.cache_dir = os.path.join(root_dir, "cache")
-        self.log_path = os.path.join(root_dir, "run_log.txt")
-        self.monitor_save_path = os.path.join(root_dir, "monitor.npy")
+        self.root_dir = os.path.join(os.getcwd(), root_dir)
+        self.download_dir = os.path.join(self.root_dir, "download")
+        self.tmp_dir = os.path.join(self.root_dir, "tmp")
+        self.cache_dir = os.path.join(self.root_dir, "cache")
+        self.log_path = os.path.join(self.root_dir, "run_log.txt")
+        self.monitor_save_path = os.path.join(self.root_dir, "monitor.npy")
         
         # check dir
         if not os.path.exists(self.cache_dir):

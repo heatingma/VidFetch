@@ -13,7 +13,7 @@ However, ``Latte`` still falls short in terms of video generation length and qua
 
 | website | windows | macos | linux |
 | :-----: | :-----: | :---: | :---: |
-| [Pexels](https://www.pexels.com) | 📆 | 📆 | 📆 |
+| [Pexels](https://www.pexels.com) | ✔ | 📆 | 📆 |
 | [Mazwai](https://mazwai.com/stock-video-footage) | 📆 | 📆 | 📆 |
 | [Mixkit](https://mixkit.co/free-stock-video) | ✔ | 📆 | ✔ |
 | [Pixabay](https://pixabay.com/videos/search/?order=ec) | ✔ | 📆 | 📆 |
