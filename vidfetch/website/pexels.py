@@ -3,15 +3,9 @@ import time
 import shutil
 import numpy as np
 from tqdm import tqdm
-from datetime import datetime
-from bs4 import BeautifulSoup
 from vidfetch.video import VideoDataset, VideoData
-from vidfetch.utils import download, get_md5, create_chrome_driver
+from vidfetch.utils import get_md5, create_chrome_driver
 from vidfetch.uid.pexels import generate_pexels_video_uid
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
 class PexelsVdieoDataset(VideoDataset):

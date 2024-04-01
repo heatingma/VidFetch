@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
+
 class PixabayVideoDataset(VideoDataset):
     def __init__(self, root_dir: str):
         super().__init__(
