@@ -34,5 +34,3 @@ def create_chrome_driver(
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(options=options)
     return driver
-
-from selenium.webdriver.chrome.options import Options

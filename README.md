@@ -49,4 +49,4 @@ mixkit.download(platform="windows")
 </details>
 
 ## VidFetch's design philosophy
-<img src="static/VidFecth.png" weight="100%">
+<img src="static/VidFetch.png" weight="100%">
