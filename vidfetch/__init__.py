@@ -7,5 +7,5 @@ from .website import MixkitVideoDataset, PixabayVideoDataset, \
     PexelsAPI, PexelsVdieoDataset
 
 
-__version__ = "0.0.1a19"
+__version__ = "0.0.1a1"
 __author__ = "heatingma"
