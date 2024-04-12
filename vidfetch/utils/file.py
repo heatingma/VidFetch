@@ -2,6 +2,8 @@ import os
 import hashlib
 import time
 import shutil
+import tarfile
+import zipfile
 import asyncio
 import aiohttp
 import requests
@@ -87,7 +89,62 @@ def get_md5(filename: str):
             hash_md5.update(buffer)
         md5_returned = hash_md5.hexdigest()
         return md5_returned
-    
+
+
+def compress_folder(
+    folder: str, 
+    compress_path: str,
+):
+    """
+    Compresses a folder into the specified output format.
+
+    Args:
+        folder (str): 
+            Path to the folder to be compressed.
+        compress_path (str): 
+            Output file path.
+
+    Supported formats:
+        - .zip: ZIP format
+        - .tar.gz: tar.gz format
+    """
+    if compress_path.endswith('.zip'):
+        shutil.make_archive(compress_path[:-4], 'zip', folder)
+    elif compress_path.endswith('.tar.gz'):
+        with tarfile.open(compress_path, "w:gz") as tar:
+            tar.add(folder, arcname="")
+    else:
+        message = "Unsupported file format. Only .zip, .tar.gz"
+        raise ValueError(message)
+
+
+def extract_archive(
+    archive_path: str, 
+    extract_path: str
+):
+    """
+    Extracts an archive into the specified extract path.
+
+    Args:
+        archive_path (str): 
+            Path to the archive file.
+        extract_path (str): 
+            Path to the extraction directory.
+            
+    Supported formats:
+        - .zip: ZIP format
+        - .tar.gz: tar.gz format
+    """
+    if archive_path.endswith('.zip'):
+        with zipfile.ZipFile(archive_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_path)
+    elif archive_path.endswith('.tar.gz'):
+        with tarfile.open(archive_path, 'r:gz') as tar_ref:
+            tar_ref.extractall(extract_path)
+    else:
+        message = "Unsupported file format. Only .zip, .tar.gz"
+        raise ValueError(message)
+
 
 def print_dict_as_table(data_dict):
     """
