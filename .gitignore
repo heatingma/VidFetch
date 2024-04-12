@@ -8,3 +8,5 @@ __pycache__/
 pixabay/**
 mixkit/**
 pexels/**
+vidfetch.egg-info/**
+dist/**

@@ -19,9 +19,9 @@ def get_property(prop, project):
 
 
 # Package meta-data.
-NAME = "data4co"
+NAME = "vidfetch"
 DESCRIPTION = "data4co provides convenient dataset generators for the combinatorial optimization problem"
-URL = "https://github.com/heatingma/Data4CO"
+URL = "https://github.com/heatingma/VidFetch/"
 AUTHOR = get_property("__author__", NAME)
 VERSION = get_property("__version__", NAME)
 REQUIRED = [
