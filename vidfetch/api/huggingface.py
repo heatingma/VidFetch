@@ -28,7 +28,7 @@ def pull_repo_from_hf(
         local_dir=save_dir,
         local_dir_use_symlinks=False
     )
-    
+
 
 def push_file_to_hf(    
     hf_token: str, hf_repo_id: str, file_path: str, path_in_repo: str,
@@ -42,7 +42,7 @@ def push_file_to_hf(
         repo_type=repo_type,
         commit_message=commit_message
     )
-    
+
 
 def push_folder_to_hf(    
     hf_token: str, hf_repo_id: str, folder_path: str, path_in_repo: str,

@@ -1,6 +1,6 @@
 import os
 import shutil
-from vidfetch.api.huggingface import pull_from_hf
+from vidfetch.api.huggingface import pull_file_from_hf
 from vidfetch.utils import extract_archive
 
 
@@ -8,7 +8,7 @@ def youtube_dl_install_helper(
     hf_token: str,
 ):
     # download youtube-dl-2024.04.08.tar.gz
-    pull_from_hf(
+    pull_file_from_hf(
         hf_token=hf_token,
         hf_repo_id="OpenVideo/Panda-70M-Original-Links",
         filename="youtube-dl-2024.04.08.tar.gz",
